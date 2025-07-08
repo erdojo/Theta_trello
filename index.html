@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
+      const GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwzh7q5p0bOpgush_42A7PB6v2mXif3vc5PBJHvy9Dbgta5IVZ5m14t1NMjckte5Z_iAw/exec";
+
+      window.TrelloPowerUp.initialize({
+        'card-buttons': function(t, options) {
+          return t.get('card', 'shared', 'start_time')
+            .then(start => {
+              if (start) {
+                return [{
+                  icon: 'https://cdn-icons-png.flaticon.com/512/60/60525.png',
+                  text: 'Ferma Timer',
+                  callback: () => stopTimer(t, start)
+                }];
+              } else {
+                return [{
+                  icon: 'https://cdn-icons-png.flaticon.com/512/60/60525.png',
+                  text: 'Avvia Timer',
+                  callback: () => startTimer(t)
+                }];
+              }
+            });
+        }
+      });
+
+      function startTimer(t) {
+        const now = new Date().toISOString();
+        return t.set('card', 'shared', { start_time: now })
+          .then(() => t.closePopup());
+      }
+
+      function stopTimer(t, startTime) {
+        const end = new Date();
+        const start = new Date(startTime);
+        const diffMs = end - start;
+        const totalSeconds = Math.floor(diffMs / 1000);
+        const hh = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const mm = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const ss = String(totalSeconds % 60).padStart(2, '0');
+        const tempo = `${hh}:${mm}:${ss}`;
+
+        return Promise.all([
+          t.card('id', 'name'),
+          t.member('fullName')
+        ]).then(([card, member]) => {
+          fetch(https://script.google.com/macros/s/AKfycbwzh7q5p0bOpgush_42A7PB6v2mXif3vc5PBJHvy9Dbgta5IVZ5m14t1NMjckte5Z_iAw/exec, {
+            method: 'POST',
+            contentType: 'application/json',
+            body: JSON.stringify({
+              card_id: card.id,
+              card_name: card.name,
+              tempo: tempo,
+              membro: member.fullName
+            })
+          });
+
+          return t.remove('card', 'shared', 'start_time')
+            .then(() => t.closePopup());
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <p>Power-Up in esecuzione</p>
+  </body>
+</html>
