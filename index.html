@@ -46,9 +46,9 @@
           t.card('id', 'name'),
           t.member('fullName')
         ]).then(([card, member]) => {
-          fetch(https://script.google.com/macros/s/AKfycbwzh7q5p0bOpgush_42A7PB6v2mXif3vc5PBJHvy9Dbgta5IVZ5m14t1NMjckte5Z_iAw/exec, {
+          fetch(GOOGLE_SHEET_WEBHOOK_URL, {
             method: 'POST',
-            contentType: 'application/json',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               card_id: card.id,
               card_name: card.name,
