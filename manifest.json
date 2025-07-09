@@ -1,0 +1,23 @@
+{
+  "name": "Time Tracker Trello",
+  "description": "Tracciamento del tempo e invio dati a Notion",
+  "id": "com.theta.trello.time-tracker",
+  "author": "Theta Group",
+  "icon": {
+    "url": "https://cdn-icons-png.flaticon.com/512/60/60525.png"
+  },
+  "capabilities": {
+    "card-buttons": {
+      "enabled": true,
+      "url": "./index.html"
+    }
+  },
+  "connectors": [],
+  "api": {
+    "origin": "https://theta-trello.vercel.app"
+  },
+  "permissions": [
+    "read",
+    "write"
+  ]
+}
